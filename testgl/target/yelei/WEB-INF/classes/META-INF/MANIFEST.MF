@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Class-Path: javax.servlet-api-3.1.0.jar spring-webmvc-4.1.7.RELEASE.ja
+ r jstl-1.2.jar slf4j-api-1.7.12.jar commons-codec-1.10.jar commons-co
+ llections-3.2.1.jar druid-1.0.16.jar commons-lang-2.5.jar spring-web-
+ 4.1.7.RELEASE.jar jconsole.jar jsoup-1.8.3.jar urlrewritefilter-4.0.3
+ .jar spring-context-4.1.7.RELEASE.jar aopalliance-1.0.jar spring-aop-
+ 4.1.7.RELEASE.jar json.jar json-lib-2.4-jdk15.jar mysql-connector-jav
+ a-5.1.37.jar spring-core-4.1.7.RELEASE.jar spring-tx-4.1.7.RELEASE.ja
+ r log4j-1.2.17.jar slf4j-log4j12-1.7.12.jar fastjson-1.2.5.jar common
+ s-beanutils-1.8.0.jar spring-context-support-4.1.7.RELEASE.jar spring
+ -expression-4.1.7.RELEASE.jar javax.servlet.jsp-api-2.3.1.jar spring-
+ aspects-4.1.7.RELEASE.jar aspectjweaver-1.8.6.jar tools.jar commons-l
+ ogging-1.1.1.jar spring-jdbc-4.1.7.RELEASE.jar spring-beans-4.1.7.REL
+ EASE.jar
+Main-Class: 
+
