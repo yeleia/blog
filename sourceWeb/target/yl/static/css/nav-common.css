@@ -1,0 +1,22 @@
+.navbar-default{
+    background-color: #ec971f;
+    border: none;
+    border-radius: 0;
+}
+.navbar-default .navbar-brand{
+    color: white;
+}
+.navbar-default .navbar-nav>li>a{
+    color: white;
+
+}
+.dropdown-menu{
+    background-color: #ec971f;
+}
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus{
+    color: white;
+    background-color: #ec971f;
+}
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:hover, .navbar-default .navbar-nav>.open>a:focus{
+    background-color: #e0862e;
+}

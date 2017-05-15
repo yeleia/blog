@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.source.dao.UserTaskDao"><!-- 当application加载dao层，会自动执行如下的命令 -->
+    <resultMap type="UserTask" id="UserTaskResult">
+        <result property="id" column="id"/>
+        <result property="userName" column="userName"/>
+        <result property="taskId" column="taskId"/>
+        <result property="uploadTime" column="uploadTime"/>
+        <result property="fileName" column="fileName"/>
+        <result property="fileUrl" column="fileUrl"/>
+        <result property="state" column="state"/>
+    </resultMap>
+    <select id="selectById" parameterType="Integer" resultMap="UserTaskResult">
+        SELECT * FROM userTask_table WHERE taskId=#{taskId}
+    </select>
+    <select id="selectAll" parameterType="String" resultMap="UserTaskResult">
+        SELECT * FROM userTask_table WHERE userName=#{userName}
+    </select>
+    <insert id="addUserTask" parameterType="UserTask">
+        INSERT into userTask_table VALUES (null,#{userName},#{taskId},#{uploadTime},#{fileName},#{fileUrl},0)
+    </insert>
+    <update id="updateUserTask" parameterType="UserTask">
+        UPDATE userTask_table
+        <set>
+            <if test="uploadTime!=null">
+                uploadTime=#{uploadTime},
+            </if>
+            <if test="fileUrl!=null and fileUrl!=''">
+                fileUrl=#{fileUrl}
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+   <select id="selectByTaskId" parameterType="Integer" resultMap="UserTaskResult">
+       SELECT * from userTask_table WHERE taskId=#{taskId}
+   </select>
+    <delete id="deleteTask" parameterType="Integer">
+        DELETE FROM userTask_table WHERE id=#{id}
+    </delete>
+
+
+
+</mapper>

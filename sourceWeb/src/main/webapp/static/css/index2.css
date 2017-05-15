@@ -1,0 +1,92 @@
+html,
+body {
+	color: #fff;
+	line-height: 1.75em;
+	background: white;
+	font-family: "微软雅黑";
+	background-image: url(../img/extra5.png);
+}
+
+body{
+	background: transparent;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+header{
+	background: #000000;
+	color: #FFFFFF;
+}
+
+span.head{
+	padding-left: 20px;
+	font-size: 18px;
+}
+
+a.exit,a.manage{
+	color: #fff;
+	margin-right: 10px;
+	font-size: 15px;
+	text-decoration: none;
+}
+
+a.exit:hover,a.manage:hover{
+	color: rgb(201,48,44);
+}
+
+.img{
+	margin-top: 20px;
+	background-image: url(../img/1.jpg);
+	min-height: 300px;
+}
+
+h3{
+	margin-bottom: 20px;
+}
+
+h4{
+	padding: 10px 10px 0 10px;
+	border-bottom: 1px solid #505050;
+	padding-bottom: 10px;
+}
+
+.post{
+	background: white;
+	border-radius: 5px;
+	color: #505050;
+	margin-left: -15px;
+	
+}
+
+.post-head{
+	text-align: center;
+	padding: 5px 0;
+}
+
+.post-content{
+	font-size: 18px;
+	margin:0 20px 40px 20px;
+	padding-bottom: 20px;
+}
+
+.widget{
+	background: #fff;
+	border-radius: 5px;
+	color: #505050;
+	min-height: 300px;
+	margin-top: -10px;
+	margin-bottom: 30px;
+}
+
+.widget-img{
+	float: left;
+	margin: 10px;
+}
+
+.widget-content{
+	margin: 15px 10px;
+	font-size: 15px;
+}

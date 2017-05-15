@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.source.dao.PaperDao"><!-- 当application加载dao层，会自动执行如下的命令 -->
+    <resultMap type="Paper" id="PaperResult">
+        <result property="id" column="id"/>
+        <result property="userName" column="userName"/>
+        <result property="isUser" column="isUser"/>
+        <result property="title" column="title"/>
+        <result property="magazine" column="magazine"/>
+        <result property="dateTime" column="dateTime"/>
+        <result property="category" column="category"/>
+        <result property="integration" column="integration"/>
+        <result property="state" column="state"/>
+        <result property="paperUrl" column="paperUrl"/>
+    </resultMap>
+    <select id="getCheck" resultMap="PaperResult">
+        SELECT * FROM Paper_table WHERE state=0
+    </select>
+    <update id="updateState" parameterType="Integer" >
+        UPDATE Paper_table set state=1 WHERE id=#{id}
+    </update>
+    <select id="selectById" parameterType="Integer" resultMap="PaperResult">
+        SELECT * FROM Paper_table WHERE id=#{id}
+    </select>
+    <delete id="deleteById" parameterType="Integer">
+        DELETE from Paper_table where id=#{id}
+    </delete>
+    <select id="selectAndSortByTitle" resultMap="PaperResult">
+        SELECT * FROM Paper_table
+        <where>
+            <if test="userName!=null and userName!=''">
+                userName LIKE concat(concat('%',#{userName}),'%')
+            </if>
+            <if test="title!=null and title!=''">
+              or title LIKE concat(concat('%',#{title}),'%')
+            </if>
+            <if test="category!=null and category!=''">
+              or category LIKE concat(concat('%',#{category}),'%')
+            </if>
+            and state=1 and isUser=1
+        </where>
+        ORDER BY title DESC
+    </select>
+    <select id="selectAndSortByTime" resultMap="PaperResult">
+        SELECT * FROM Paper_table
+        <where>
+            <if test="userName!=null and userName!=''">
+                userName LIKE concat(concat('%',#{userName}),'%')
+            </if>
+            <if test="title!=null and title!=''">
+              or title LIKE concat(concat('%',#{title}),'%')
+            </if>
+            <if test="category!=null and category!=''">
+              or category LIKE concat(concat('%',#{category}),'%')
+            </if>
+            and state=1 and isUser=1
+        </where>
+        ORDER BY dateTime DESC
+    </select>
+    <select id="selectAndSortByInt" resultMap="PaperResult">
+        SELECT * FROM Paper_table
+        <where>
+            <if test="userName!=null and userName!=''">
+                userName LIKE concat(concat('%',#{userName}),'%')
+            </if>
+            <if test="title!=null and title!=''">
+               or title LIKE concat(concat('%',#{title}),'%')
+            </if>
+            <if test="category!=null and category!=''">
+               or category LIKE concat(concat('%',#{category}),'%')
+            </if>
+            and state=1 and isUser=1
+        </where>
+        ORDER BY integration DESC
+    </select>
+    <delete id="deleteByUserName" parameterType="String">
+        DELETE FROM Paper_table WHERE userName=#{userName} and isUser=1
+    </delete>
+    <insert id="addPaper" parameterType="Paper">
+        INSERT into Paper_table VALUES (NULL ,#{userName},#{isUser},#{title},#{magazine},#{dateTime},
+       #{category},#{integration},#{state},#{paperUrl} )
+    </insert>
+    <select id="selectByUserNane" parameterType="String" resultMap="PaperResult">
+        SELECT * FROM Paper_table WHERE userName=#{userName} AND state=1
+    </select>
+
+
+
+
+
+</mapper>

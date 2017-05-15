@@ -1,0 +1,14 @@
+.navbar{
+    margin-bottom: 0;
+}
+.jumbotron{
+    background-image: -webkit-linear-gradient(0deg, #FF6600 0%, #ec971f 100%);
+    color: white;
+}
+h4{
+    color: inherit;
+}
+a.list-group-item:hover, a.list-group-item:focus{
+    background-color: #ec971f;
+    color: white;
+}

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.source.dao.TaskDao"><!-- 当application加载dao层，会自动执行如下的命令 -->
+    <resultMap type="Task" id="TaskResult">
+        <result property="id" column="id"/>
+        <result property="adminName" column="adminName"/>
+        <result property="title" column="title"/>
+        <result property="pushTime" column="pushTime"/>
+        <result property="endTime" column="endTime"/>
+        <result property="template" column="template"/>
+    </resultMap>
+    <insert id="addTask" parameterType="Task">
+        INSERT INTO task_table VALUES (NULL ,#{adminName},#{title},#{pushTime},#{endTime},#{template})
+    </insert>
+    <select id="selectTask" resultMap="TaskResult">
+        SELECT * FROM task_table
+    </select>
+    <select id="selectById" parameterType="Integer" resultMap="TaskResult">
+        SELECT * FROM task_table WHERE id=#{id}
+    </select>
+    <update id="updateTask" parameterType="Task">
+        UPDATE task_table
+        <set>
+            <if test="title!=null and title!=''">
+                title=#{title},
+            </if>
+            <if test="endTime!=null">
+                endTime=#{endTime},
+            </if>
+            <if test="template!=null and template!=''">
+                template=#{template}
+            </if>
+        </set>
+        WHERE id=#{id}
+
+    </update>
+    <delete id="deleteTask" parameterType="Integer">
+        DELETE FROM task_table WHERE id=#{id}
+    </delete>
+
+
+</mapper>

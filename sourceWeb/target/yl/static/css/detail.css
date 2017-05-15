@@ -1,0 +1,14 @@
+.detail>h1{
+    text-align: center;
+}
+.detail>.author{
+    font-size: 20px;
+    text-align: center;
+}
+.detail>.unit{
+    font-size: 16px;
+    text-align: center;
+}
+.toolbox{
+    text-align: right;
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.source.dao.AdminDao"><!-- 当application加载dao层，会自动执行如下的命令 -->
+    <resultMap type="Admin" id="AdminResult">
+        <result property="id" column="id"/>
+        <result property="adminName" column="adminName"/>
+        <result property="password" column="password"/>
+        <result property="nikeName" column="nikeName"/>
+
+    </resultMap>
+    <insert id="addAdmin" parameterType="Admin">
+        INSERT INTO admin_table VALUES (NULL ,#{adminName},#{password},#{nikeName})
+    </insert>
+    <select id="selectAdmin" parameterType="String" resultMap="AdminResult">
+        SELECT * from admin_table WHERE adminName=#{adminName}
+    </select>
+    <select id="selectByName" parameterType="String" resultMap="AdminResult">
+        SELECT * FROM admin_table WHERE adminName=#{adminName}
+    </select>
+    <update id="updateById" parameterType="Admin">
+        UPDATE admin_table set password=#{password} WHERE id=#{id}
+    </update>
+    <update id="updateNikeName" parameterType="Admin">
+        UPDATE admin_table SET nikeName=#{nikeName} WHERE id=#{id}
+    </update>
+
+
+</mapper>

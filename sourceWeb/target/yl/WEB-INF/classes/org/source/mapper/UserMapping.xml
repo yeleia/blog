@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.source.dao.UserDao"><!-- 当application加载dao层，会自动执行如下的命令 -->
+    <resultMap type="User" id="UserResult">
+        <result property="id" column="id"/>
+        <result property="userName" column="userName"/>
+        <result property="password" column="password"/>
+        <result property="power" column="power"/>
+        <result property="roler" column="roler"/>
+        <result property="nikeName" column="nikeName"/>
+        <result property="job" column="job"/>
+        <result property="blongs" column="blongs"/>
+        <result property="phone" column="phone"/>
+        <result property="adress" column="adress"/>
+        <result property="fileCount" column="fileCount"/>
+        <result property="projectCount" column="projectCount"/>
+        <result property="integration" column="integration"/>
+    </resultMap>
+    <select id="getByUserName" parameterType="String" resultMap="UserResult">
+        SELECT * FROM user_table WHERE userName=#{userName}
+    </select>
+    <insert id="registerUser" parameterType="User">
+        insert into  user_table values (NULL ,#{userName},#{password},#{power},#{roler},
+        #{nikeName},#{job},#{blongs},#{phone},#{adress},0,0,0);
+    </insert>
+    <update id="updateFileCount" parameterType="User">
+        UPDATE user_table SET fileCount=#{fileCount}+1,integration=#{integration}+integration WHERE userName=#{userName}
+    </update>
+    <select id="selectAndSortByName" parameterType="User" resultMap="UserResult">
+        SELECT * FROM user_table
+        <where>
+            <if test="userName!=null and userName!=''">
+                userName LIKE concat(concat('%',#{userName}),'%')
+            </if>
+        </where>
+        order BY userName desc
+    </select>
+    <select id="selectAndSortByFileCount" parameterType="User" resultMap="UserResult">
+        SELECT * FROM user_table
+        <where>
+            <if test="userName!=null and userName!=''">
+                userName LIKE concat(concat('%',#{userName}),'%')
+            </if>
+        </where>
+        order BY fileCount desc
+    </select>
+    <select id="selectAndSortByProjectCount" parameterType="User" resultMap="UserResult">
+        SELECT * FROM user_table
+        <where>
+            <if test="userName!=null and userName!=''">
+                userName LIKE concat(concat('%',#{userName}),'%')
+            </if>
+        </where>
+        order BY projectCount desc
+    </select>
+    <select id="selectAndSortByIntegration" parameterType="User" resultMap="UserResult">
+        SELECT * FROM user_table
+        <where>
+            <if test="userName!=null and userName!=''">
+                userName LIKE concat(concat('%',#{userName}),'%')
+            </if>
+        </where>
+        order BY integration desc
+    </select>
+    <delete id="deleteUser" parameterType="String">
+        DELETE FROM user_table WHERE userName=#{userName}
+    </delete>
+    <select id="selectById" parameterType="Integer" resultMap="UserResult">
+        SELECT * FROM user_table WHERE id=#{id}
+    </select>
+    <update id="updateInfo" parameterType="User">
+        UPDATE user_table
+        <set>
+            <if test="nikeName!=null and nikeName!=''">
+                nikeName=#{nikeName},
+            </if>
+            <if test="power!=null and power!=''">
+                power=#{power},
+            </if>
+            <if test="roler!=null and roler!=''">
+                roler=#{roler},
+            </if>
+            <if test="job!=null and job!=''">
+                job=#{job},
+            </if>
+            <if test="blongs!=null and blongs!=''">
+                blongs=#{blongs},
+            </if>
+            <if test="phone!=null and phone!=''">
+                phone=#{phone},
+            </if>
+            <if test="adress!=null and adress!=''">
+                adress=#{adress}
+            </if>
+        </set>
+        WHERE id=${id}
+    </update>
+    <update id="updatePa" parameterType="User">
+        UPDATE user_table
+        <set>
+            <if test="password!=null and password!=''">
+                password=#{password}
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+    <update id="addProjectCount" parameterType="User">
+        UPDATE user_table SET projectCount=projectCount+1,integration=#{integration}+integration WHERE userName=#{userName}
+    </update>
+    <select id="selectAllUser" resultMap="UserResult">
+        SELECT * FROM user_table
+    </select>
+    <delete id="deleteById" parameterType="Integer">
+        DELETE FROM  user_table WHERE id=#{id}
+    </delete>
+
+
+
+</mapper>
