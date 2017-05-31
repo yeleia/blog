@@ -1,0 +1,131 @@
+package com.reeham.controller;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.reeham.component.ddd.model.ModelUtils;
+import com.reeham.component.webbiz.controller.ModelCrudControllerSupport;
+import com.reeham.component.webbiz.controller.ResponseUtils;
+import com.reeham.component.webbiz.pagination.PaginationQueryContext;
+import com.reeham.component.webbiz.pagination.SortPagedList;
+import com.reeham.component.webbiz.service.ModelCrudService;
+import com.reeham.domain.UserDomain;
+import com.reeham.service.RoleService;
+import com.reeham.service.UserService;
+
+/**
+ * 设备管理相关操作
+ * 
+ * @author Administrator
+ *
+ */
+@Controller
+public class UserController extends ModelCrudControllerSupport {
+
+	protected final Logger logger = Logger.getLogger(UserController.class);
+
+	@Resource
+	private UserService userService;
+
+	@Resource
+	private RoleService roleService;
+	
+	@RequestMapping(value = "/user/index", method = { RequestMethod.POST, RequestMethod.GET })
+	public String index(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setAttribute("roles", roleService.getAllRoles());
+		return "user/list";
+	}
+
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/user/list/data", method = { RequestMethod.POST, RequestMethod.GET })
+	public void devicesList(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			PaginationQueryContext queryContext = new PaginationQueryContext(request);
+			queryContext.setStartIndex((queryContext.getPageIndex() - 1) * queryContext.getPageSize());
+			queryContext.setPageSize(queryContext.getPageSize());
+			SortPagedList<UserDomain> pagedList = (SortPagedList<UserDomain>) userService.list(queryContext,
+					UserDomain.class, userService.getPagedModelIds(queryContext),
+					userService.getTotalCount(queryContext));
+			List<UserDomain> list = pagedList.getItems();
+			ResponseUtils.writeMessage(response, pagedList.pageDescription(userService.getJsonList(list)).toString());
+		} catch (Exception e) {
+			logger.error(e, e);
+			ResponseUtils.writeJsonErrorMessage(response, "系统出错");
+		}
+	}
+
+	@RequestMapping(value = "/user/edit/{id}", method = { RequestMethod.POST, RequestMethod.GET })
+	public String devicesEdit(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") Long id)
+			throws Exception {
+		try {
+			UserDomain user = null;
+			if (id != null && id.longValue() > 0) {
+				user = userService.getModel(id);
+			}
+			request.setAttribute("roles", roleService.getAllRoles());
+			request.setAttribute("user", user);
+		} catch (Exception e) {
+			logger.error(e, e);
+			return "/res/failure";
+		}
+		return "user/edit";
+	}
+
+	/**
+	 * 设备添加和更新
+	 * 
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/user/update", method = { RequestMethod.POST, RequestMethod.GET })
+	public void userUpdate(HttpServletRequest request, HttpServletResponse response, final UserDomain domain) {
+		try {
+			UserDomain user = null;
+			if (domain != null && domain.getId() != null && domain.getId().longValue() > 0) {
+				user = userService.getModel(domain.getId());
+			}
+			if (user == null) {
+				user = new UserDomain();
+			}
+			user.setName(domain.getName());
+			user.setMobile(domain.getMobile());
+			user.setRole(roleService.getModel(new Long(request.getParameter("roleId"))));
+			userService.saveOrUpdate(user);
+			ResponseUtils.writeJsonSuccessMessage(response, "保存成功");
+		} catch (Exception e) {
+			logger.error(e, e);
+			ResponseUtils.writeJsonErrorMessage(response, "系统异常");
+		}
+	}
+
+	@RequestMapping(value = "/user/delete", method = { RequestMethod.POST, RequestMethod.GET })
+	public void userDelete(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String id = request.getParameter("id");
+			if (StringUtils.isNotBlank(id)) {
+				userService.delete(new Long(id));
+			}
+			this.modelContainer.removeModel(ModelUtils.asModelKey(UserDomain.class, new Long(id)));// 删除缓存
+			ResponseUtils.writeJsonSuccessMessage(response, "保存成功");
+		} catch (Exception e) {
+			logger.error(e, e);
+			ResponseUtils.writeJsonErrorMessage(response, "系统异常");
+		}
+	}
+
+	@Override
+	protected ModelCrudService getModelCrudService() {
+		return userService;
+	}
+
+}

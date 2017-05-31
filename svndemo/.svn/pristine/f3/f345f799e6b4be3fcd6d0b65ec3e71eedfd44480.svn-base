@@ -1,0 +1,76 @@
+package com.reeham.service.impl;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.reeham.component.ddd.model.ModelContainer;
+import com.reeham.component.ddd.model.ModelUtils;
+import com.reeham.component.webbiz.pagination.PaginationQueryContext;
+import com.reeham.component.webbiz.repository.ModelRepository;
+import com.reeham.component.webbiz.service.ModelCrudServiceSupport;
+import com.reeham.domain.RoleDomain;
+import com.reeham.repository.RoleRepository;
+import com.reeham.service.RoleService;
+
+@Service
+public class RoleServiceImpl extends ModelCrudServiceSupport implements RoleService{
+	
+	protected final Logger logger = Logger.getLogger(RoleServiceImpl.class);
+	
+	@Resource
+	private RoleRepository roleRepository;
+	
+	@Resource
+	private ModelContainer modelContainer;
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true, rollbackFor = Exception.class)
+	public RoleDomain get(Long id) {
+		if (id==null||id.longValue()==0) {
+			return null;
+		}
+//		AdminUserDomain asd=adminUserRepository.get(id);
+		return this.roleRepository.get(id);
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true, rollbackFor = Exception.class)
+	public RoleDomain getModel(Long id) {
+		if(id==null||id.longValue()==0)return null;
+		RoleDomain domain=(RoleDomain) modelContainer.getModel(ModelUtils.asModelKey(RoleDomain.class, id),domainModelLoader);
+		if(domain!=null)domain.setInitialized(true);
+		return domain;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true, rollbackFor = Exception.class)
+	public List getPagedModelIds(PaginationQueryContext queryContext) {
+		return null;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true, rollbackFor = Exception.class)
+	public int getTotalCount(PaginationQueryContext queryContext) {
+		HttpServletRequest request = queryContext.getRequest();
+		return 0;
+	}
+
+
+	@Override
+	protected ModelRepository getModelRepository() {
+		return roleRepository;
+	}
+
+	@Override
+	public List<RoleDomain> getAllRoles() {
+		return this.modelContainer.identifiersToModels(roleRepository.getAllRoleIds(), RoleDomain.class, this.domainModelLoader);
+	}
+	
+}

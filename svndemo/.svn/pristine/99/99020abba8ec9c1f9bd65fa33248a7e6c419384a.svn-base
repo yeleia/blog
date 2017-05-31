@@ -1,0 +1,68 @@
+var list = list || {};
+$(function(){
+	
+	
+	list.loadData = function(pageIndex){
+		var name = $(".search_name").val();
+		$.ajax({
+		    url : contextPath + "/d/user/list/data",
+		    dataType : "json", 
+		    data:{
+		    	pageSize:4,
+		    	pageIndex:pageIndex,
+		    	name:name
+		    },
+		    type : "post"
+	    }).done(function(data) {
+	    	if(data.isSuc==1){
+	    		if (data.rows != "") {
+	 		    	$("#users_table_tbody").html($("#_tpl_users_tbody_").tmpl(data));
+	 		    }else{
+	 		    	$("#users_table_tbody").html($("#_tpl_users_no_data_").tmpl());
+	 		    }
+	    		 $(".page").html($("#_tpl_users_pagination_").tmpl(data.pagi));
+	    	}else{
+	    		alert("加载失败");
+	    	}
+	    });
+		
+	};
+	list.loadData(1);
+	
+	$(".search_btn").click(function(){
+		list.loadData(1);
+	});
+	
+	$("#users_table_tbody").undelegate(".delete_btn").delegate(".delete_btn","click",function(){
+		if(confirm('确认删除')){
+			if($(this).hasClass("dealing"))return;
+			$(this).addClass("dealing");
+			var id = $(this).attr("data");
+			$.ajax({
+				url : contextPath + "/d/user/delete",
+				dataType : "json", 
+				data:{id:id},
+				type : "post"
+			}).done(function(data) {
+				if (data.isSuc == 1) {
+					var pindex = $(".currPage").html();
+					if(pindex){
+						list.loadData(pindex);
+					}else{
+						list.loadData(1);
+					}
+				}else{
+					alert('fail');
+				}
+				$(this).removeClass("dealing");
+			});
+		}
+			
+	});
+	
+	
+	
+	
+	
+	
+});

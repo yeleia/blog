@@ -1,0 +1,32 @@
+var edit = edit || {};
+$(function() {
+
+	$('.user_edit_frm').ajaxForm({
+		dataType : 'json',
+		beforeSubmit : function(formData, jqForm, options) {
+			var validate = true;
+			var cname = $("input[name='name']");
+			if (cname.val() == null || $.trim(cname.val()).length == 0) {
+				alert('名称不能为空');
+				validate = false;
+			} else {
+			}
+			return validate;
+		},
+		success : function(data) {
+			if (data.isSuc == '1') {
+				alert("保存成功");
+				doNext();
+			} else {
+				alert(data.msg);
+			}
+
+		}
+	});
+	
+	
+	$(".save_btn").click(function(){
+		$('.user_edit_frm').submit();
+	});
+
+});

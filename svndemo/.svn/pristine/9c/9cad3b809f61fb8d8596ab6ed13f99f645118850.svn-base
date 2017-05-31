@@ -1,0 +1,23 @@
+package com.reeham.domain.repository;
+import java.io.Serializable;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Component;
+
+import com.reeham.component.ddd.annotation.Introduce;
+import com.reeham.domain.RoleDomain;
+import com.reeham.service.RoleService;
+
+@Introduce("message")
+@Component
+public class WtLazyLoaderRole implements Serializable {
+    private static final long serialVersionUID = 11244653453L;
+	@Resource
+	public RoleService roleService;
+	
+	public RoleDomain wtLazyLoadRoleEventMessage(Long deviceId) {
+		return roleService.getModel(deviceId);
+    }
+ 
+}

@@ -1,0 +1,57 @@
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : localhost
+ Source Server Type    : MySQL
+ Source Server Version : 50508
+ Source Host           : localhost
+ Source Database       : wtdemo
+
+ Target Server Type    : MySQL
+ Target Server Version : 50508
+ File Encoding         : utf-8
+  00
+ Date: 03/27/2017 12:01:14 PM
+*/
+
+
+SET NAMES utf8;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+--  Table structure for `ROLES`
+-- ----------------------------
+DROP TABLE IF EXISTS `ROLES`;
+CREATE TABLE `ROLES` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `NAME` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `ROLES`
+-- ----------------------------
+BEGIN;
+INSERT INTO `ROLES` VALUES ('1', '管理员'), ('2', '业务员');
+COMMIT;
+
+-- ----------------------------
+--  Table structure for `USERS`
+-- ----------------------------
+DROP TABLE IF EXISTS `USERS`;
+CREATE TABLE `USERS` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `NAME` varchar(20) DEFAULT NULL,
+  `MOBILE` varchar(13) DEFAULT NULL,
+  `ROLE_ID` bigint(20) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `ROLE_ID` (`ROLE_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `USERS`
+-- ----------------------------
+BEGIN;
+INSERT INTO `USERS` VALUES ('1', 'user1', '1333333333', '1'), ('2', 'user2', '1444444444', '2'), ('3', 'user3', '1555555555', '1'), ('4', 'user4', '1666666666', '2'), ('5', 'user5', '1777777777', '1'), ('6', 'user6', '1888888888', '2'), ('7', 'user7', '1999999999', '1'), ('8', 'user8', '1111111111', '1'), ('9', 'user9', '1222222222', '2');
+COMMIT;
+

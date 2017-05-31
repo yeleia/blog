@@ -1,0 +1,17 @@
+package com.reeham.domain;
+
+import com.reeham.component.webbiz.domain.BaseDomain;
+
+public class RoleDomain extends BaseDomain {
+
+	private String name; // 用户名
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+}

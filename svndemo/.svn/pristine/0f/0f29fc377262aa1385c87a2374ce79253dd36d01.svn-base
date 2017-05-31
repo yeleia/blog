@@ -1,0 +1,16 @@
+package com.reeham.service;
+
+import java.util.List;
+
+import com.reeham.component.webbiz.service.ModelCrudService;
+import com.reeham.domain.UserDomain;
+
+
+public interface UserService extends ModelCrudService{
+
+	public UserDomain getModel(Long id);
+	
+	public String getJsonList(List<UserDomain> userLs);
+	
+	
+}

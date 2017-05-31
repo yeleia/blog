@@ -1,0 +1,36 @@
+package com.reeham.repository;
+
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.jdbc.SelectBuilder;
+
+public class UserSqlProvider {
+
+	public String getPagedModelIds(Map<String,Object> parameters){
+		String name = (String) parameters.get("name");
+		SelectBuilder.BEGIN();
+		SelectBuilder.SELECT("ID");
+		SelectBuilder.FROM("USERS");
+		if(StringUtils.isNotBlank(name)){
+			SelectBuilder.WHERE("NAME LIKE #{name}");
+		}
+		SelectBuilder.ORDER_BY("ID ASC");
+		String sql = SelectBuilder.SQL();
+		return sql+" LIMIT #{startIndex},#{pageSize}";
+	}
+	
+	public String getTotalCount(Map<String,Object> parameters){
+		String name = (String) parameters.get("name");
+		SelectBuilder.BEGIN();
+		SelectBuilder.SELECT("COUNT(ID)");
+		SelectBuilder.FROM("USERS");
+		if(StringUtils.isNotBlank(name)){
+			SelectBuilder.WHERE("NAME LIKE #{name}");
+		}
+		String sql = SelectBuilder.SQL();
+		return sql;
+	}
+	
+	
+}

@@ -1,0 +1,49 @@
+package com.reeham.repository;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.type.JdbcType;
+
+import com.reeham.component.ddd.annotation.Around;
+import com.reeham.component.webbiz.repository.ModelRepository;
+import com.reeham.domain.RoleDomain;
+
+public interface RoleRepository extends ModelRepository {
+
+	@Around
+	@Select("SELECT * FROM ROLES WHERE ID=#{id}")
+	@Results(value={
+			@Result(property="name",column="NAME",javaType=String.class,jdbcType=JdbcType.VARCHAR)
+	})
+	public RoleDomain get(@Param("id") Long id);
+	
+	@Update("DELETE FROM  ROLES  WHERE ID=#{id}")
+	public void delete(@Param("id")Long id);
+	
+	@Insert("INSERT INTO ROLES(NAME) VALUES(#{name})")
+	@Options(keyProperty = "id",useGeneratedKeys = true)
+	public Object save(@Param("domain") RoleDomain domain);
+	
+	@Update("UPDATE ROLES SET NAME=#{name} WHERE ID=#{id}")
+	public Object update(@Param("domain") RoleDomain domain);
+	
+
+	@SelectProvider(type = UserSqlProvider.class, method = "getPagedModelIds")
+	public List<Long> getPagedModelIds(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,
+			@Param("sortField") String sortField, @Param("sortType") String sortType,
+			@Param("name") String name);
+	
+	@SelectProvider(type = UserSqlProvider.class, method = "getTotalCount")
+	public int getTotalCount(@Param("name") String name);
+	
+	@Select("SELECT ID FROM  ROLES ")
+	public List<Long> getAllRoleIds();
+}

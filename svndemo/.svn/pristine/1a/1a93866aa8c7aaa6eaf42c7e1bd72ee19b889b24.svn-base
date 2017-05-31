@@ -1,0 +1,218 @@
+
+ <#setting number_format="#">
+<script type="text/javascript" src="${rc.contextPath}/res/js/jquery/jquery-1.10.2.min.js"></script>
+ <script>
+	var contextPath = '${rc.contextPath}';
+ $(function(){
+ 
+ 	$("body").undelegate(".mem_gc_btn","click").delegate(".mem_gc_btn","click",function(){
+		$(".pyloading").show();
+		$.ajax({
+		    url : contextPath + "/d/plat/mem/clear",
+		    dataType : "json",type : "post"
+	    }).done(function(data) {
+		    $(".pyloading").hide();
+		    if (data.isSuc == 1) {
+		    	alert('清除缓存成功');
+		    }
+		    else{
+		    	alert('清除缓存失败');
+		    }
+	    });
+	});
+ 
+ 	$("body").undelegate(".domain_gc_btn","click").delegate(".domain_gc_btn","click",function(){
+		//$(".pyloading").show();
+		var domain = $("#domain").val();
+		var did = $("#did").val();
+		if(did==null||did==''){
+		$("#warning1").show();
+		}else{
+			$("#warning1").hide();
+			$.ajax({
+		    url : contextPath + "/a/plat/domain/clear",
+		    dataType : "json",data:{domain:domain,did:did},type : "post"
+	   	 }).done(function(data) {
+		    $(".pyloading").hide();
+		    if (data.isSuc == 1) {
+		    	alert('清除缓存成功');
+		    }
+		    else{
+		    	alert('清除缓存失败');
+		    }
+	   	 });
+	  }
+		
+		
+	});
+	
+	$("body").undelegate("select#clearType","blur").delegate("select#clearType","blur",function(){
+	
+	var clear = $("#clearType");
+	
+	if(clear.val()=="monthRebateByMonth"||clear.val()=='funcCacheByTaskType'||clear.val()=='goodCache'||clear.val()=='letterCache'||clear.val()=='lotteryLuckyerCache'||clear.val()=='lotteryIdByDateCache'){
+		$("#tmp").show();
+		$("#tmp").val("0");
+	}else{
+		$("#tmp").hide();
+		$("#tmp").val("");
+	}
+		
+	});
+ 
+ 	$("body").undelegate(".cache_gc_btn","click").delegate(".cache_gc_btn","click",function(){
+		//$(".pyloading").show();
+		var clearType = $("#clearType").val();
+		var tmp = $("#tmp").val();
+		
+	if(tmp=='0'){
+		$("#warning2").show();
+	}else{
+		$("#warning2").hide();
+		
+		$.ajax({
+		    url : contextPath + "/a/plat/cache/clear",
+		    dataType : "json",data:{clearType:clearType,tmp:tmp},type : "post"
+	    }).done(function(data) {
+		    $(".pyloading").hide();
+		    if (data.isSuc == 1) {
+		    	alert('清除缓存成功');
+		    }
+		    else{
+		    	alert('清除缓存失败');
+		    }
+	    });
+	}
+		
+	});
+	
+ });
+ </script>
+<div class='imPadding'>
+	<input type='button' value='清除缓存' class='btn btn-primary mem_gc_btn'>
+	<!--span class='loading pyloading'><img src='${rc.contextPath}/res/images/loading.gif'/>正在处理...</span>
+	<br/>
+	<select name = "domain" id="domain">
+			 
+	
+	 		<option value="ApsUserDomain" >ApsUserDomain</option>
+	 		<option value="AppCouponDomain" >AppCouponDomain</option>
+	 		<option value="AppCouponPrizeDomain" >AppCouponPrizeDomain</option>
+	 		<option value="ApsLogDomain" >ApsLogDomain</option>
+	 		<option value="ApsMessageDomain" >ApsMessageDomain</option>
+	 		<option value="ApsMessageTemplateDomain" >ApsMessageTemplateDomain</option>
+	 		<option value="ApsUserDomain" >ApsUserDomain</option>
+	 		<option value="ApsUserEntryDomain" >ApsUserEntryDomain</option> 
+	 		
+	 		<option value="CmsAdDomain" >CmsAdDomain</option>
+	 		<option value="CmsAddressDomain" >CmsAddressDomain</option>
+	 		<option value="CmsCdKeyDomain" >CmsCdKeyDomain</option>
+	 		<option value="CmsCouponTaskLogDomain" >CmsCouponTaskLogDomain</option>
+	 		<option value="CmsGoodListDomain" >CmsGoodListDomain</option>
+	 		<option value="CmsGoodsDomain" >CmsGoodsDomain</option>
+	 		<option value="CmsMonthRebateDomain" >CmsMonthRebateDomain</option>
+	 		<option value="CmsOcrRuleDomain" >CmsOcrRuleDomain</option>
+	 		<option value="CmsOrderDetailVo" >CmsOrderDetailVo</option>
+	 		<option value="CmsOrderDomain" >CmsOrderDomain</option>
+	 		<option value="CmsReceiptEntryDomain" >CmsReceiptEntryDomain</option>
+	 		<option value="CmsReceiptNoCouponDomain" >CmsReceiptNoCouponDomain</option>
+	 		<option value="CmsRebateDomain" >CmsRebateDomain</option>
+	 		<option value="CmsRebateTaskDomain" >CmsRebateTaskDomain</option>
+	 		<option value="CmsShopFaHuoDanZhuDomain" >CmsShopFaHuoDanZhuDomain</option>
+	 		<option value="CmsShopRuKuDanZhuDomain" >CmsShopRuKuDanZhuDomain</option>
+	 		<option value="CmsStockCheckDomain" >CmsStockCheckDomain</option>
+	 		<option value="CmsPrizeBreakageDomain" >CmsPrizeBreakageDomain</option>
+	 		<option value="CmsQuestionDomain" >CmsQuestionDomain</option>
+	 		
+	 		<option value="PrizeDataDomain" >PrizeDataDomain</option>
+	 		<option value="LotteryDataDomain" >LotteryDataDomain</option>
+	 		<option value="CouponDataDomain" >CouponDataDomain</option>
+	 		<option value="CmsUserAmountDetailDomain" >CmsUserAmountDetailDomain</option>
+	 		
+	 		<option value="AppBusinessVo" >AppBusinessVo</option>
+	 		<option value="AppCityVo" >AppCityVo</option>
+	 		<option value="AppCompanyDomain" >AppCompanyDomain</option>
+	 		<option value="AppCouponDomain" >AppCouponDomain</option>
+	 		<option value="AppCouponGoodsDetailVo" >AppCouponGoodsDetailVo</option>
+	 		<option value="AppCouponGoodsDomain" >AppCouponGoodsDomain</option>
+	 		<option value="AppCouponPrizeDealDomain" >AppCouponPrizeDealDomain</option>
+	 		<option value="AppCouponPrizeDomain" >AppCouponPrizeDomain</option>
+	 		<option value="AppCouponStoreDomain" >AppCouponStoreDomain</option>
+	 		<option value="AppCouponTaskDetailVo" >AppCouponTaskDetailVo</option>
+	 		<option value="AppCouponTaskDomain" >AppCouponTaskDomain</option>
+	 		<option value="AppDistrictVo" >AppDistrictVo</option>
+	 		<option value="AppFeedbackDomain" >AppFeedbackDomain</option>
+	 		<option value="AppHotSearchDomain" >AppHotSearchDomain</option>
+	 		<option value="AppLotteryDomain" >AppLotteryDomain</option>
+	 		<option value="AppLotteryLogDomain" >AppLotteryLogDomain</option>
+	 		<option value="AppReceiptUnsptDomain" >AppReceiptUnsptDomain</option>
+	 		<option value="AppRelCouponCompanyVo" >AppRelCouponCompanyVo</option>
+	 		<option value="AppShopDomain" >AppShopDomain</option>
+	 		<option value="AppUserFriendDomain" >AppUserFriendDomain</option>
+	 		<option value="AppUserMessageDomain" >AppUserMessageDomain</option>
+	 		<option value="AppUserNewsDomain" >AppUserNewsDomain</option>
+	 		<option value="WgtWordVo" >WgtWordVo</option>
+	 		
+	 		
+	 		
+	 		<option value="IposCompanyDomain" >IposCompanyDomain</option>
+	 		<option value="IposCouponDomain" >IposCouponDomain</option>
+	 		<option value="IposCouponGoodsListDomain" >IposCouponGoodsListDomain</option>
+	 		<option value="IposCouponTaskDomain" >IposCouponTaskDomain</option>
+	 		<option value="IposCouponTaskGoodsDomain" >IposCouponTaskGoodsDomain</option>
+	 		<option value="IposCouponTaskPicDomain" >IposCouponTaskPicDomain</option>
+	 		<option value="IposGoodsClassifyDomain" >IposGoodsClassifyDomain</option>
+	 		<option value="IposGoodsDomain" >IposGoodsDomain</option>
+	 		<option value="IposLogDomain" >IposLogDomain</option>
+	 		<option value="IposOrderFormDetailDomain" >IposOrderFormDetailDomain</option>
+	 		<option value="IposOrderFormDomain" >IposOrderFormDomain</option>
+	 		<option value="IposPanKuDetailDomain" >IposPanKuDetailDomain</option>
+	 		<option value="IposShopDomain" >IposShopDomain</option>
+	 		<option value="IposShopGoodsDomain" >IposShopGoodsDomain</option>
+	 		<option value="IposStockInDetailDomain" >IposStockInDetailDomain</option>
+	 		<option value="IposStockInDomain" >IposStockInDomain</option>
+	 		<option value="IposUserDomain" >IposUserDomain</option>
+	 		
+	 		
+	 		<option value="IposAdDomain" >IposAdDomain</option>
+	 		<option value="IposChargeSalerDomain" >IposChargeSalerDomain</option>
+	 		<option value="IposCouponGiftDomain" >IposCouponGiftDomain</option>
+	 		<option value="IposCouponGoodsOrderDomain" >IposCouponGoodsOrderDomain</option>
+	 		<option value="IposCouponTotalGoodsOrderDomain" >IposCouponTotalGoodsOrderDomain</option>
+	 		<option value="IposDealerGoodsClassifyDomain" >IposDealerGoodsClassifyDomain</option>
+	 		<option value="IposDealerGoodsDomain" >IposDealerGoodsDomain</option>
+	 		<option value="IposDealerSaleDomain" >IposDealerSaleDomain</option>
+	 		<option value="IposDealerShopDomain" >IposDealerShopDomain</option>
+	 		<option value="IposGoodsMainDomain" >IposGoodsMainDomain</option>
+	 		<option value="IposPresentCouponDomain" >IposPresentCouponDomain</option>
+	 		<option value="IposSaleShopDomain" >IposSaleShopDomain</option>
+	 		<option value="IposShopComplainDomain" >IposShopComplainDomain</option>
+	 		<option value="IposShopDealerGoodsRelDomain" >IposShopDealerGoodsRelDomain</option>
+	 		<option value="IposShopGradeRelDomain" >IposShopGradeRelDomain</option>
+	 		<option value="IposShopPointsDetail" >IposShopPointsDetail</option>
+	 		<option value="IposSysSettingDomain" >IposSysSettingDomain</option>
+	 		<option value="IposUserNewsDomain" >IposUserNewsDomain</option>
+	 		<option value="IposVersionUpdateDomain" >IposVersionUpdateDomain</option>
+	 		<option value="IposVersionUpdateDomain" >IposSaleVisitLogDomain</option>
+	 		
+	 </select>
+	 <input name="did" id="did" type="text"  style="width:70px;" >(ID)
+	 <input type='button' value='清除' class='btn btn-primary domain_gc_btn'><span class='loading pyloading'><img src='${rc.contextPath}/res/images/loading.gif'/>正在处理...</span>
+	 <span style="display:none;color:red;" id="warning1">ID不可为空!</span>
+	<br/>
+	<select name = "clearType" id="clearType">
+	 		<option value="indexAdCache" >indexAdCache</option>
+	 		<option value="supportCompanyCache" >supportCompanyCache</option>
+	 		<option value="hotSupportCompanyCache" >hotSupportCompanyCache</option>
+	 		<option value="funcCache" >funcCache</option>
+	 		<option value="funcCacheByTag" >funcCacheByTag</option>
+	 		<option value="monthRebateByMonth" >monthRebateByMonth(参数：YYYYMM)</option>
+	 		<option value="goodCache" >goodCache(参数：goodName)</option>
+	 		<option value="letterCache" >letterCache(参数：letterName)</option>
+	 		<option value="lotteryLuckyerCache" >lotteryLuckyerCache(参数：lotteryId)</option>
+	 		<option value="lotteryIdByDateCache" >lotteryIdByDateCache(参数：dateStr)</option>
+	 </select>
+	 <input name="tmp" id="tmp" type="text"  style="width:100px;display:none;" >
+	<input type='button' value='清除' class='btn btn-primary cache_gc_btn'><span class='loading pyloading'><img src='${rc.contextPath}/res/images/loading.gif'/>正在处理...</span>
+	<span style="display:none;color:red;" id="warning2">参数不可为0!</span-->
+</div>

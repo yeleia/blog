@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="${rc.contextPath}/res/css/style.css?"/>
+		<script type="text/javascript" src="${rc.contextPath}/res/js/jquery/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="${rc.contextPath}/res/js/jquery/jquery.form.js"></script>
+		<script type="text/javascript">
+			var contextPath = '${rc.contextPath}';
+			function doNext(){
+				window.location.href="${rc.contextPath}/d/user/index";
+			}
+		</script>	
+		<script type="text/javascript" src="${rc.contextPath}/res/js/user/edit.js"></script>
+		<title></title>
+	</head>
+	<body>
+		<div class="menu">
+			<a href="${rc.contextPath}/d/user/index">返回</a>
+		</div>
+		<div class="dialog" id="dialog" style="display:block;">
+			<div class="dialog_header">
+				<a></a>编辑用户
+			</div>
+			<form action="${rc.contextPath}/d/user/update" method="post" class="user_edit_frm">
+			<input type="hidden" name="id" value="${user.id}">
+			<table>
+				<tr>
+					<td style="width: 70px;">用户名:</td><td><input value="${user.name}" name="name" type="text"></td>
+				</tr>
+				<tr>
+					<td>手机号:</td><td><input name="mobile" value="${user.mobile}" type="text"></td>
+				</tr>
+				<tr>
+					<td>详细地址:</td><td>
+						<select  name="roleId">
+							<#if roles?? && roles?size gt 0>
+							<#list roles as rtmp>
+								<option value="${rtmp.id}" <#if user.role.id==rtmp.id>selected</#if>>${rtmp.name!''}</option>
+							</#list>
+							</#if>
+						</select>
+					</td>
+				</tr>
+			</table>
+			</form>
+			<div class="dialog_footer">
+				<a class="save_btn">保存</a>
+			</div>
+		</div>
+	</body>
+</html>

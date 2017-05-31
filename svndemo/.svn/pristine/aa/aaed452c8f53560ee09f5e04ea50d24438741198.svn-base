@@ -1,0 +1,114 @@
+package com.reeham.service.impl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.reeham.component.ddd.model.ModelContainer;
+import com.reeham.component.ddd.model.ModelUtils;
+import com.reeham.component.webbiz.pagination.PaginationQueryContext;
+import com.reeham.component.webbiz.repository.ModelRepository;
+import com.reeham.component.webbiz.repository.MyBatisRepository;
+import com.reeham.component.webbiz.service.ModelCrudServiceSupport;
+import com.reeham.component.webbiz.util.JsonUtils;
+import com.reeham.domain.UserDomain;
+import com.reeham.repository.UserRepository;
+import com.reeham.service.UserService;
+
+@Service
+public class UserServiceImpl extends ModelCrudServiceSupport implements UserService{
+	
+	protected final Logger logger = Logger.getLogger(UserServiceImpl.class);
+	
+	@Resource
+	private UserRepository userRepository;
+	
+	@Resource
+	private ModelContainer modelContainer;
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true, rollbackFor = Exception.class)
+	public UserDomain get(Long id) {
+		if (id==null||id.longValue()==0) {
+			return null;
+		}
+//		AdminUserDomain asd=adminUserRepository.get(id);
+		return this.userRepository.get(id);
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true, rollbackFor = Exception.class)
+	public UserDomain getModel(Long id) {
+		if(id==null||id.longValue()==0)return null;
+		UserDomain domain=(UserDomain) modelContainer.getModel(ModelUtils.asModelKey(UserDomain.class, id),domainModelLoader);
+		if(domain!=null)domain.setInitialized(true);
+		return domain;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true, rollbackFor = Exception.class)
+	public List getPagedModelIds(PaginationQueryContext queryContext) {
+		HttpServletRequest request = queryContext.getRequest();
+		String name = request.getParameter("name");
+		List<Object> paramLs = new ArrayList<Object>();
+		if(StringUtils.isNotBlank(name)){
+			paramLs.add("%"+name+"%");
+		}else{
+			paramLs.add(null);
+		}
+		queryContext.setParams(paramLs.toArray());
+			return this.queryForPaginationList(new MyBatisRepository() {
+				@Override
+				public List queryForPagination(int startIndex, int pageSize, String sortField, 
+						String sortType,Object... params) {
+					return userRepository.getPagedModelIds(startIndex, pageSize, sortField, sortType, (String)params[0]);
+				}
+			}, queryContext);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true, rollbackFor = Exception.class)
+	public int getTotalCount(PaginationQueryContext queryContext) {
+		HttpServletRequest request = queryContext.getRequest();
+		String name = request.getParameter("name");
+		if(StringUtils.isNotBlank(name)){
+			name = "%"+name+"%";
+		}
+			return userRepository.getTotalCount(name);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true, rollbackFor = Exception.class)
+	public String getJsonList(List<UserDomain> userLs) {
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		for(UserDomain tmp:userLs){
+			list.add(getJson(tmp));
+		}
+		return JsonUtils.JSON_List2String(list);
+	}
+	
+	public Map<String,Object> getJson(UserDomain tmp){
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("id", tmp.getId());
+		map.put("mobile", tmp.getMobile());
+		map.put("name", tmp.getName());
+		map.put("role", tmp.getRole().getName());
+		return map;
+	}
+
+	@Override
+	protected ModelRepository getModelRepository() {
+		return userRepository;
+	}
+	
+}

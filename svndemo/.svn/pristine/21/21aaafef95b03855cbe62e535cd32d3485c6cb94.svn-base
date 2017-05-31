@@ -1,0 +1,59 @@
+package com.reeham.domain;
+
+import javax.annotation.Resource;
+
+import com.reeham.component.webbiz.domain.BaseDomain;
+import com.reeham.domain.repository.WtLazyLoaderRole;
+
+public class UserDomain extends BaseDomain {
+
+	private static final long serialVersionUID = 72342L;
+
+	private String name; // 用户名
+
+	private String mobile; // 密码
+
+	private RoleDomain role;
+
+
+	@Resource
+	public transient WtLazyLoaderRole lazyLoader;
+
+
+	public RoleDomain getRole() {
+		if (role != null && !role.isInitialized()) {
+			role = lazyLoader.wtLazyLoadRoleEventMessage(role.getId());
+			if (role != null)
+				role.setInitialized(true);
+		} 
+		return role;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public String getMobile() {
+		return mobile;
+	}
+
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+
+	public void setRole(RoleDomain role) {
+		this.role = role;
+	}
+
+
+
+}

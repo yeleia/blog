@@ -1,0 +1,50 @@
+package com.reeham.repository;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.type.JdbcType;
+
+import com.reeham.component.ddd.annotation.Around;
+import com.reeham.component.webbiz.repository.ModelRepository;
+import com.reeham.domain.UserDomain;
+
+public interface UserRepository extends ModelRepository {
+
+	@Around
+	@Select("SELECT * FROM USERS WHERE ID=#{id}")
+	@Results(value={
+			@Result(property="name",column="NAME",javaType=String.class,jdbcType=JdbcType.VARCHAR),
+			@Result(property="mobile",column="MOBILE",javaType=String.class,jdbcType=JdbcType.VARCHAR),
+			@Result(property="role.id",column="ROLE_ID",javaType=Long.class,jdbcType=JdbcType.BIGINT)
+	})
+	public UserDomain get(@Param("id") Long id);
+	
+	@Update("DELETE FROM USERS  WHERE ID=#{id}")
+	public void delete(@Param("id")Long id);
+	
+	@Insert("INSERT INTO USERS(NAME,MOBILE,ROLE_ID) VALUES(#{name},#{mobile},#{role.id})")
+	@Options(keyProperty = "id",useGeneratedKeys = true)
+	public Object save(@Param("domain") UserDomain domain);
+	
+	@Update("UPDATE USERS SET NAME=#{name},MOBILE=#{mobile},ROLE_ID=#{role.id} WHERE ID=#{id}")
+	public Object update(@Param("domain") UserDomain domain);
+	
+
+	@SelectProvider(type = UserSqlProvider.class, method = "getPagedModelIds")
+	public List<Long> getPagedModelIds(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,
+			@Param("sortField") String sortField, @Param("sortType") String sortType,
+			@Param("name") String name);
+	
+	@SelectProvider(type = UserSqlProvider.class, method = "getTotalCount")
+	public int getTotalCount(@Param("name") String name);
+	
+    
+}

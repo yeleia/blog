@@ -1,0 +1,15 @@
+package com.reeham.service;
+
+import java.util.List;
+
+import com.reeham.component.webbiz.service.ModelCrudService;
+import com.reeham.domain.RoleDomain;
+
+
+public interface RoleService extends ModelCrudService{
+
+	public RoleDomain getModel(Long id);
+	
+	public List<RoleDomain> getAllRoles();
+	
+}

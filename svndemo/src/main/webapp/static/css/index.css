@@ -1,0 +1,38 @@
+html,
+body {
+	line-height: 1.75em;
+	background: white;
+	font-family: "微软雅黑";
+	background-image: url(../img/extra5.png);
+}
+
+body{
+	background: transparent;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.txt-p{
+	margin-top: 20px;
+}
+
+.submit-p{
+	margin-top: 20px;
+}
+
+#txt{
+	min-height: 200px;
+	border-radius:5px ;
+	border: 1px solid lightgray;
+}
+
+.foot {
+	background: #000000;
+	margin-top: 150px;
+	color: white;
+	text-align: center;
+}
+

@@ -1,0 +1,9 @@
+<meta charset="UTF-8">
+<title>页面错误</title>
+<div class="edit">
+	<div class="errorHtml">
+		<img src="${rc.contextPath}/res/images/errorImg.png">
+		<p>哎呀！您访问的页面在开小差</p>
+		<a>刷新页面</a>
+	</div>
+</div>
